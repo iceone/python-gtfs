@@ -1,0 +1,13 @@
+.venv/
+.idea/
+
+htmlcov/
+deb_dist/
+*.egg-info/
+__pycache__/
+
+*.pyc
+*.DS_Store
+
+tests.xml
+.coverage
