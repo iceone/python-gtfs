@@ -8,12 +8,13 @@
 import os
 import sys
 from operator import itemgetter
-
+from abc import ABCMeta, abstractproperty
 
 def BaseModel(typename, fields):
 
     typeclass = """class {typename}(tuple):
 
+        __metaclass__ = ABCMeta
         __slots__ = ()
         __required__ = ()
 
@@ -38,6 +39,11 @@ def BaseModel(typename, fields):
         def __fields__(self):
             return ({fields})
 
+        @abstractproperty
+        def __filename__():
+            # Must be overloaded
+            pass
+
     {properties}
     """
     
@@ -61,6 +67,8 @@ def BaseModel(typename, fields):
    
     namespace = dict(
         itemgetter=itemgetter,
+        ABCMeta=ABCMeta,
+        abstractproperty=abstractproperty,
         property=property,
         tuple=tuple,
         properties=properties,
