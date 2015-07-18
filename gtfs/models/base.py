@@ -5,6 +5,7 @@
 
     Base model like namedtuple.
 """
+from __future__ import unicode_literals
 import os
 import sys
 from operator import itemgetter
@@ -19,14 +20,14 @@ def BaseModel(typename, fields):
         __required__ = ()
 
         def __new__(cls, {args}):
-            iterable = map(str, ({args}))
+            iterable = map(lambda x: x, ({args}))
             result = tuple.__new__(cls, iterable)
             if len(result) != {numfields}:
                 raise TypeError('Expected {numfields} arguments, got {{gotfields}}'
                     .format(gotfields=len(result))
                 )
             for field in cls.__required__:
-                if not len(getattr(result, field)):
+                if getattr(result, field) is None:
                     raise ValueError('Missing required Field {{field}}'
                         .format(field=field)
                     )
@@ -46,7 +47,7 @@ def BaseModel(typename, fields):
 
     {properties}
     """
-    
+
     property_fmt = """
         {name} = property(itemgetter({index}))
     """
@@ -64,7 +65,7 @@ def BaseModel(typename, fields):
         repr_fields=repr_fields,
         properties=properties
     )
-   
+
     namespace = dict(
         itemgetter=itemgetter,
         ABCMeta=ABCMeta,

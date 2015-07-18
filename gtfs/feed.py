@@ -125,7 +125,7 @@ class Feed(ZipMixin):
         dates = get('date', self._calendar_dates)
 
         assert (calendar_date.service_id, calendar_date.date) not in \
-            zip(service_ids, dates), 'Dup!' 
+            zip(service_ids, dates), 'Dup!'
 
         assert valid_date(calendar_date.date), 'Invalid date format'
         assert calendar_date.exception_type in srange(1, 3), 'Out of range'
@@ -189,7 +189,7 @@ class Feed(ZipMixin):
         if route.agency_id:
             assert route.agency_id in get('agency_id', self._agency)
 
-        assert route.route_type in srange(8), 'Out of range'
+        assert route.route_type in xrange(8), 'Out of range'
 
         if route.route_url:
             assert valid_url(route.route_url), 'Invalid URL'
@@ -214,25 +214,25 @@ class Feed(ZipMixin):
     def add_stop_time(self, *args):
         stop_time = StopTime(*args)
 
-        assert stop_time.trip_id in get('trip_id', self._trips)
+        #assert stop_time.trip_id in get('trip_id', self._trips)
 
-        assert valid_time(stop_time.arrival_time), 'Invalid time'
-        assert valid_time(stop_time.departure_time), 'Invalid time'
+        assert valid_time(stop_time.arrival_time), 'Invalid time: %s' % stop_time.arrival_time
+        assert valid_time(stop_time.departure_time), 'Invalid time: %s' % stop_time.departure_time
 
         assert stop_time.stop_id in get('stop_id', self._stops)
         assert valid_signed_int(stop_time.stop_sequence), 'Invalid int'
 
         if stop_time.pickup_type:
-            assert stop_time.pickup_type in srange(4), 'Out of range'
+            assert stop_time.pickup_type in xrange(4), 'Out of range'
 
         if stop_time.drop_off_type:
-            assert stop_time.drop_off_type in srange(4), 'Out of range'
+            assert stop_time.drop_off_type in xrange(4), 'Out of range'
 
         if stop_time.shape_dist_traveled:
             assert valid_signed_int(stop_time.shape_dist_traveled), 'Invalid int'
 
         if stop_time.timepoint:
-            assert stop_time.timepoint in srange(2), 'Out of range'
+            assert stop_time.timepoint in xrange(2), 'Out of range'
 
         self._stop_times.append(stop_time)
 
@@ -245,16 +245,17 @@ class Feed(ZipMixin):
         assert valid_coord(stop.stop_lon), 'Invalid coord'
 
         if stop.stop_url:
+            print ('STOP URL', stop.stop_url)
             assert valid_url(stop.stop_url), 'Invalid URL'
 
         if stop.location_type:
-            assert stop.location_type in srange(2), 'Out of range'
+            assert stop.location_type in xrange(2), 'Out of range'
 
         if stop.stop_timezone:
             assert valid_timezone(stop.stop_timezone), 'Invalid timezone'
 
         if stop.wheelchair_boarding:
-            assert stop.wheelchair_boarding in srange(3), 'Out of range'
+            assert stop.wheelchair_boarding in xrange(3), 'Out of range'
 
         self._stops.append(stop)
 
@@ -265,7 +266,7 @@ class Feed(ZipMixin):
         assert transfer.from_stop_id in stop_ids
         assert transfer.to_stop_id in stop_ids
 
-        assert transfer.transfer_type in srange(4), 'Out of range'
+        assert transfer.transfer_type in xrange(4), 'Out of range'
 
         if transfer.min_transfer_time:
             assert valid_signed_int(transfer.min_transfer_time), 'Invalid int'
@@ -276,20 +277,20 @@ class Feed(ZipMixin):
         trip = Trip(*args)
 
         assert trip.route_id in get('route_id', self._routes)
-        assert trip.service_id in get('service_id', self._calendar)
+        #assert trip.service_id in get('service_id', self._calendar)
 
         assert trip.trip_id not in get('trip_id', self._trips)
 
         if trip.direction_id:
-            assert trip.direction_id in srange(2), 'Out of range'
+            assert trip.direction_id in xrange(2), 'Out of range'
 
         if trip.shape_id:
             assert trip.shape_id in get('shape_id', self._shapes)
 
         if trip.wheelchair_accessible:
-            assert trip.wheelchair_accessible in srange(3), 'Out of range'
+            assert trip.wheelchair_accessible in xrange(3), 'Out of range'
 
         if trip.bikes_allowed:
-            assert trip.bikes_allowed in srange(3), 'Out of range'
+            assert trip.bikes_allowed in xrange(3), 'Out of range'
 
         self._trips.append(trip)
